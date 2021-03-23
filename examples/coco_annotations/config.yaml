@@ -54,11 +54,11 @@
       "config": {
         "cam_poses": [
           {
-            "number_of_samples": 3,
+            "number_of_samples": 5,
             "location": {
               "provider":"sampler.Uniform3d",
-              "max":[10, 10, 0],
-              "min":[-10, -10, 10]
+              "max":[10, 20, 20],
+              "min":[-10, -10, 2]
             },
             "rotation": {
               "format": "look_at",
