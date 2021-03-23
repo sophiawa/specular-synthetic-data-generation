@@ -30,31 +30,108 @@
       }
     },
     {
-      "module": "lighting.LightLoader",
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": { 
+            "cp_category_id": 0  # this guarantees that the object is a mesh, and not for example a camera
+          }
+        },
+        "cp_physics": False,
+        "cp_name": "ground_plane"
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": { 
+            "cp_category_id": 1  # this guarantees that the object is a mesh, and not for example a camera
+          }
+        },
+        "cp_physics": True
+      }
+    },
+    {
+      "module": "object.ObjectPoseSampler",
+      "config":{
+        "number_of_samples": 3,
+        "objects_to_sample": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "cp_physics": True,
+            "type": "MESH"
+          }
+        },
+        "pos_sampler":{
+          "provider":"sampler.Uniform3d",
+          "max":[2.5, 2.5, 3],
+          "min":[0, 0, 0]
+        },
+        "rot_sampler":{
+          "provider":"sampler.UniformSO3",
+          "around_x": False,
+          "around_y": False
+        }
+      }
+    },
+    {
+      "module": "lighting.LightSampler",
       "config": {
         "lights": [
           {
-            "type": "POINT",
-            "location": [5, -5, 5],
-            "energy": 1000
+            "number_of_samples": 3,
+            "location": {
+              "provider": "sampler.Shell",
+              "center": [1, 2, 3],
+              "radius_min": 4,
+              "radius_max": 7,
+              "elevation_min": 15,
+              "elevation_max": 70
+              },
+              "type": "POINT",
+              "energy": 500
           }
         ]
       }
     },
     {
-      "module": "camera.CameraLoader",
+      "module": "object.PhysicsPositioning",
       "config": {
-        "path": "<args:0>",
-        "file_format": "location rotation/value",
-        "intrinsics": {
-          "fov": 1
-        }
+        "min_simulation_time": 3,
+        "max_simulation_time": 10,
+        "check_object_interval": 1,
+        "solver_iters": 5,
+        "collision_shape": "MESH"
       }
     },
     {
-      "module": "renderer.RgbRenderer",
+      "module": "camera.CameraSampler",
       "config": {
-        "output_key": "colors"
+        "cam_poses": [
+          {
+            "number_of_samples": 3,
+            "location": {
+              "provider":"sampler.Uniform3d",
+              "max":[10, -37, 19],
+              "min":[-10, -57, 15]
+            },
+            "rotation": {
+              "format": "look_at",
+              "value": {
+                "provider": "getter.POI"
+              },          
+              "inplane_rot": {
+                "provider": "sampler.Value",
+                "type": "float",
+                "min": -0.7854,
+                "max": 0.7854
+              }
+            }
+          }
+        ]
       }
     },
     {
@@ -64,9 +141,20 @@
       }
     },
     {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "samples": 150,
+        "output_key": "colors",
+        "render_normals": True
+      }
+    },
+    {
       "module": "writer.CocoAnnotationsWriter",
       "config": {
       }
+    },
+    {
+      "module": "writer.Hdf5Writer"
     }
   ]
 }

@@ -4,7 +4,8 @@
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
-      "h5py"
+      "h5py",
+      "imageio"
     ]
   },
   "modules": [
@@ -19,19 +20,88 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:0>"
+        "path": "<args:0>",
+        "add_properties": {
+           "cp_physics": True
+        }
       }
     },
     {
-      "module": "lighting.LightLoader",
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": { 
+            "cp_category_id": 0  # this guarantees that the object is a mesh, and not for example a camera
+          }
+        },
+        "add_properties": {
+           "cp_physics": False,
+           "cp_name": "ground_plane"
+        }
+      }
+    },
+    {
+      "module": "manipulators.WorldManipulator",
+      "config": {
+        "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
+      }
+    },
+    {
+      "module": "object.ObjectPoseSampler",
+      "config":{
+        "objects_to_sample": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "cp_physics": True,
+            "type": "MESH"
+          }
+        },
+        "pos_sampler":{
+          "provider":"sampler.Uniform3d",
+          "max":[2.5, 2.5, 3],
+          "min":[0, 0, 0]
+        },
+        "rot_sampler":{
+          "provider":"sampler.UniformSO3",
+          "around_x": False,
+          "around_y": False
+        }
+      }
+    },
+    {
+      "module": "lighting.LightSampler",
       "config": {
         "lights": [
-          {
-            "type": "POINT",
-            "location": [5, -5, 5],
-            "energy": 1000
-          }
+        {
+          "location": {
+            "provider": "sampler.Shell",
+            "center": [0, 0, 0],
+            "radius_min": 1,
+            "radius_max": 1.5,
+            "elevation_min": 5,
+            "elevation_max": 89,
+            "uniform_elevation": True
+          },
+          "color": {
+            "provider": "sampler.Color",
+            "min": [0.5, 0.5, 0.5, 1.0],
+            "max": [1.0, 1.0, 1.0, 1.0]
+          },
+          "type": "POINT",
+          "energy": 200
+        }
         ]
+      }
+    },
+    {
+      "module": "object.PhysicsPositioning",
+      "config": {
+        "min_simulation_time": 3,
+        "max_simulation_time": 10,
+        "check_object_interval": 1,
+        "solver_iters": 5,
+        "collision_shape": "MESH"
       }
     },
     {
@@ -62,12 +132,41 @@
       }
     },
     {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "Material.001"
+          }
+        },
+        "cf_color_link_to_displacement": 1.5
+      }
+    },
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "Material.*"
+          }
+        },
+        "mode": "once_for_each",
+        "cf_textures": {
+          "Base Color": {
+            "provider": "sampler.Path",
+            "path": "<args:2>/*.jpg"
+          }
+        }
+      }
+    },
+    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
         "samples": 350,
-        "render_normals": True,
-        "render_distance": True
+        "render_normals": True
       }
     },
     {
@@ -75,4 +174,3 @@
     }
   ]
 }
-

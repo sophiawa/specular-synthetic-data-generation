@@ -20,7 +20,8 @@
     {
       "module": "loader.BlendLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "cp_category_id": 1
       }
     },
     {

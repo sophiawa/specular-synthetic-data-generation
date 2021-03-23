@@ -17,7 +17,8 @@ args = parser.parse_args()
 conf = args.conf
 image_idx = args.image_index
 base_path = args.base_path
-save = args.save
+#save = args.save
+save = True
 
 # Read coco_annotations config
 with open(os.path.join(base_path, conf)) as f:
@@ -40,6 +41,7 @@ def get_category(_id):
 
 
 font = ImageFont.load_default()
+#print(annotations)
 # Add bounding boxes and masks
 for idx, annotation in enumerate(annotations):
     if annotation["image_id"] == image_idx:
@@ -54,14 +56,15 @@ for idx, annotation in enumerate(annotations):
             item = Image.fromarray(item, mode='L')
             overlay = Image.new('RGBA', im.size)
             draw_ov = ImageDraw.Draw(overlay)
-            draw_ov.bitmap((0, 0), item, fill=(255, 0, 0, 128))
+            draw_ov.bitmap((0, 0), item, fill=(255, 255, 255, 255))
             im = Image.alpha_composite(im, overlay)
         else:
             item = annotation["segmentation"][0]
             poly = Image.new('RGBA', im.size)
             pdraw = ImageDraw.Draw(poly)
-            pdraw.polygon(item, fill=(255, 255, 255, 127), outline=(255, 255, 255, 255))
+            pdraw.polygon(item, fill=(0, 0, 0, 0), outline=(0, 0, 0, 0))
             im.paste(poly, mask=poly)
 if save:
     im.save(os.path.join(base_path, 'coco_annotated_{}.png'.format(image_idx)), "PNG")
+    
 im.show()
