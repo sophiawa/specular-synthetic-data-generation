@@ -44,7 +44,7 @@
               "elevation_max": 70
               },
               "type": "POINT",
-              "energy": 3000
+              "energy": 5000
           }
         ]
       }
