@@ -50,31 +50,14 @@
           },
           "max": {
             "provider": "sampler.Uniform3d",
-            "min": [0.2, 0.2, 0.4],
-            "max": [0.3, 0.3, 0.6]
+            "min": [0.2, 0.2, 0.0],
+            "max": [0.3, 0.3, 0.0]
           }
         },
         "rot_sampler":{
-          "provider":"sampler.UniformSO3"
-        }
-      }
-    },
-    {
-      "module": "object.PhysicsPositioning",
-      "config": {
-        "min_simulation_time": 3,
-        "max_simulation_time": 10,
-        "check_object_interval": 1,
-        "solver_iters": 25,
-        "substeps_per_frame": 20,
-        "friction": 100.0,
-        "linear_damping": 0.99,
-        "angular_damping": 0.99,
-        "objs_with_box_collision_shape": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "ground_plane.*"
-          }
+          "provider":"sampler.UniformSO3",
+          "around_x": False,
+          "around_y": False
         }
       }
     },
