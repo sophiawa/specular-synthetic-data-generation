@@ -22,12 +22,6 @@
       }
     },
     {
-      "module": "loader.ObjectLoader",
-      "config": {
-        "path": "<args:3>"
-      }
-    },
-    {
       "module": "loader.CCMaterialLoader",
       "config": {
         "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"],
@@ -44,9 +38,9 @@
             "module": "loader.IKEALoader",
             "config": {
               "data_dir": "<args:0>",
-              "category": ["chair", "desk", "table"]
+              "category": ["bed", "chair", "desk", "bookshelf"]
             },
-            "amount_of_repetitions": 3
+            "amount_of_repetitions": 15
           },
         ]
       }
@@ -67,7 +61,10 @@
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [{
-          "number_of_samples": 25,
+          "number_of_samples": 5,
+          "proximity_checks": {
+            "min": 1.2
+          },
           "location": {
             "provider": "sampler.UpperRegionSampler",
             "min_height": 1.5,
@@ -88,6 +85,7 @@
               "min":[1.0, 0, 0]
             }
           },
+          "min_interest_score": 0.4,
           "check_if_pose_above_object_list": {
             "provider": "getter.Entity",
             "conditions": {
@@ -101,7 +99,7 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 150,
+        "samples": 350,
         "render_distance": True
       }
     },
