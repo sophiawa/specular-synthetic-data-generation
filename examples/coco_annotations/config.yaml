@@ -77,6 +77,36 @@
       }
     },
     {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "Material.011"
+          }
+        },
+        "cf_color_link_to_displacement": 1.5
+      }
+    },
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "Material.*"
+          }
+        },
+        "mode": "once_for_each",
+        "cf_textures": {
+          "Base Color": {
+            "provider": "sampler.Path",
+            "path": "<args:0>/*.jpg"
+          }
+        }
+      }
+    },
+    {
       "module": "renderer.SegMapRenderer",
       "config": {
         "map_by": ["instance", "class"]
