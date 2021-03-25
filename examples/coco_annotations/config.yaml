@@ -94,7 +94,7 @@
               "name": "Cube.001"
             }
           },
-          "number_of_samples": 10,
+          "number_of_samples": 15,
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
@@ -113,7 +113,7 @@
                 "conditions": {
                   "name": "Cylinder.*"
                 },
-                "random_samples": 10
+                "random_samples": 15
               }
             },
             "inplane_rot": {
