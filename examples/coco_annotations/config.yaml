@@ -31,33 +31,32 @@
       "config": {
         "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
       }
+    }, 
+    {
+      "module": "loader.CCMaterialLoader",
+      "config": {
+        "folder_path": "<args:3>",
+        "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble", "Concrete"]
+      }
     },
     {
-      "module": "object.ObjectPoseSampler",
+      "module": "manipulators.EntityManipulator",
       "config": {
-        "objects_to_sample": {
+        "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "cp_physics": True
+            "name": "Cube.001"
           }
         },
-        "pos_sampler": {
-          "provider":"sampler.Uniform3d",
-          "min": {
-            "provider": "sampler.Uniform3d",
-            "min": [-0.3, -0.3, 0.0],
-            "max": [-0.2, -0.2, 0.0]
-          },
-          "max": {
-            "provider": "sampler.Uniform3d",
-            "min": [0.2, 0.2, 0.0],
-            "max": [0.3, 0.3, 0.0]
+        "cf_randomize_materials": {
+          "randomization_level": 1,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 4,
+            "conditions": {
+              "cp_is_cc_texture": True
+            }
           }
-        },
-        "rot_sampler":{
-          "provider":"sampler.UniformSO3",
-          "around_x": False,
-          "around_y": False
         }
       }
     },
@@ -66,7 +65,7 @@
       "config": {
         "lights": [
           {
-            "number_of_samples": 1,
+            "number_of_samples": 6,
             "location": {
               "provider": "sampler.Shell",
               "center": [1, 2, 3],
@@ -85,57 +84,47 @@
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [
-          {
-            "number_of_samples": 5,
-            "location": {
-              "provider":"sampler.Uniform3d",
-              "max":[10, 20, 20],
-              "min":[-10, -10, 2]
-            },
-            "rotation": {
-              "format": "look_at",
-              "value": {
-                "provider": "getter.POI"
-              },          
-              "inplane_rot": {
-                "provider": "sampler.Value",
-                "type": "float",
-                "min": -0.7854,
-                "max": 0.7854
+        {
+          "proximity_checks": {
+            "min": 0.3
+          },
+          "excluded_objs_in_proximity_check":  {
+            "provider": "getter.Entity",
+            "conditions": {
+              "name": "Cube.001"
+            }
+          },
+          "number_of_samples": 10,
+          "location": {
+            "provider": "sampler.Shell",
+            "center": [0, 0, 0],
+            "radius_min": 5.0,
+            "radius_max": 30.0,
+            "elevation_min": 10,
+            "elevation_max": 89,
+            "uniform_elevation": True
+          },
+          "rotation": {
+            "format": "look_at",
+            "value": {
+              "provider": "getter.POI",
+              "selector": {
+                "provider": "getter.Entity",
+                "conditions": {
+                  "name": "Cylinder.*"
+                },
+                "random_samples": 10
               }
+            },
+            "inplane_rot": {
+              "provider": "sampler.Value",
+              "type": "float",
+              "min": -0.7854,
+              "max": 0.7854
             }
           }
-        ]
-      }
-    },
-    {
-      "module": "manipulators.MaterialManipulator",
-      "config": {
-        "selector": {
-          "provider": "getter.Material",
-          "conditions": {
-            "name": "Material.011"
-          }
-        },
-        "cf_color_link_to_displacement": 1.5
-      }
-    },
-    {
-      "module": "manipulators.MaterialManipulator",
-      "config": {
-        "selector": {
-          "provider": "getter.Material",
-          "conditions": {
-            "name": "Material.*"
-          }
-        },
-        "mode": "once_for_each",
-        "cf_textures": {
-          "Base Color": {
-            "provider": "sampler.Path",
-            "path": "<args:0>/*.jpg"
-          }
         }
+        ]
       }
     },
     {
