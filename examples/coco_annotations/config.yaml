@@ -57,6 +57,53 @@
               "cp_is_cc_texture": True
             }
           }
+        },
+        "cp_physics": False
+      }
+    },
+    {
+      "module": "object.ObjectPoseSampler",
+      "config": {
+        "objects_to_sample": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Cylinder.*"
+          }
+        },
+        "pos_sampler": {
+          "provider":"sampler.Uniform3d",
+          "min": {
+            "provider": "sampler.Uniform3d",
+            "min": [-0.3, -0.3, 0.0],
+            "max": [-0.2, -0.2, 0.0]
+          },
+          "max": {
+            "provider": "sampler.Uniform3d",
+            "min": [0.2, 0.2, 0.4],
+            "max": [0.3, 0.3, 0.6]
+          }
+        },
+        "rot_sampler":{
+          "provider":"sampler.UniformSO3"
+        }
+      }
+    },
+    {
+      "module": "object.PhysicsPositioning",
+      "config": {
+        "min_simulation_time": 3,
+        "max_simulation_time": 10,
+        "check_object_interval": 1,
+        "solver_iters": 25,
+        "substeps_per_frame": 20,
+        "friction": 100.0,
+        "linear_damping": 0.99,
+        "angular_damping": 0.99,
+        "objs_with_box_collision_shape": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Cube.001"
+          }
         }
       }
     },
@@ -94,7 +141,7 @@
               "name": "Cube.001"
             }
           },
-          "number_of_samples": 15,
+          "number_of_samples": 3,
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
@@ -113,7 +160,7 @@
                 "conditions": {
                   "name": "Cylinder.*"
                 },
-                "random_samples": 15
+                "random_samples": 3
               }
             },
             "inplane_rot": {

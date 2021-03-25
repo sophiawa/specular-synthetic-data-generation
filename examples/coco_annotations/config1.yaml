@@ -178,20 +178,6 @@
       }
     },
     {
-      "module": "manipulators.EntityManipulator",
-      "config": {
-        "selector": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "Cylinder.*"
-          }
-        },
-        "cf_randomize_materials": {
-          "randomization_level": 0.5
-        }
-      }
-    },
-    {
       "module": "renderer.SegMapRenderer",
       "config": {
         "map_by": ["instance", "class"]
