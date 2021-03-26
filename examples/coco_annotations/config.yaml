@@ -27,11 +27,17 @@
       }
     },
     {
+      "module": "loader.HavenEnvironmentLoader",
+      "config": {
+        "data_path": "<args:4>"
+      }
+    },
+    {
       "module": "manipulators.WorldManipulator",
       "config": {
         "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
       }
-    }, 
+    },
     {
       "module": "loader.CCMaterialLoader",
       "config": {
@@ -112,7 +118,7 @@
       "config": {
         "lights": [
           {
-            "number_of_samples": 6,
+            "number_of_samples": 1,
             "location": {
               "provider": "sampler.Shell",
               "center": [1, 2, 3],
@@ -121,8 +127,8 @@
               "elevation_min": 15,
               "elevation_max": 70
               },
-              "type": "POINT",
-              "energy": 10000
+              "type": "SUN",
+              "energy": 100
           }
         ]
       }
