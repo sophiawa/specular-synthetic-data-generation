@@ -128,7 +128,7 @@
               "elevation_max": 70
               },
               "type": "SUN",
-              "energy": 100
+              "energy": 5
           }
         ]
       }
