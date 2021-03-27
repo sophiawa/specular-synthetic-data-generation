@@ -38,26 +38,32 @@ def get_category(_id):
         return category[0]
     else:
         raise Exception("Category {} is not defined in {}".format(_id, os.path.join(base_path, conf)))
-
+im.show()
 
 font = ImageFont.load_default()
 #print(annotations)
 # Add bounding boxes and masks
 for idx, annotation in enumerate(annotations):
+    #print(annotation)
     if annotation["image_id"] == image_idx:
+
+        
+
         draw = ImageDraw.Draw(im)
+        #im.show()
         bb = annotation['bbox']
-        draw.rectangle(((bb[0], bb[1]), (bb[0] + bb[2], bb[1] + bb[3])), fill=None, outline="red")
-        draw.text((bb[0] + 2, bb[1] + 2), get_category(annotation["category_id"]), font=font)
+        #draw.rectangle(((bb[0], bb[1]), (bb[0] + bb[2], bb[1] + bb[3])), fill=None, outline="red")
+        #draw.text((bb[0] + 2, bb[1] + 2), get_category(annotation["category_id"]), font=font)
         if isinstance(annotation["segmentation"], dict):
             im.putalpha(255)
             an_sg = annotation["segmentation"]
             item = mask.decode(mask.frPyObjects(an_sg, im.size[1], im.size[0])).astype(np.uint8) * 255
             item = Image.fromarray(item, mode='L')
-            overlay = Image.new('RGBA', im.size)
+            overlay = Image.new('L', im.size)
             draw_ov = ImageDraw.Draw(overlay)
-            draw_ov.bitmap((0, 0), item, fill=(255, 255, 255, 255))
-            im = Image.alpha_composite(im, overlay)
+            draw_ov.bitmap((0, 0), item, fill=(255))
+            im = overlay
+            #im = Image.alpha_composite(im, overlay)
         else:
             item = annotation["segmentation"][0]
             poly = Image.new('RGBA', im.size)
