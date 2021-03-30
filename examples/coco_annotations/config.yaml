@@ -68,43 +68,44 @@
       }
     },
     {
-      "module": "object.ObjectPoseSampler",
+      "module": "manipulators.EntityManipulator",
       "config": {
-        "objects_to_sample": {
+        # get pans
+        "selector": {
           "provider": "getter.Entity",
           "conditions": {
             "name": "Cylinder.*"
           }
         },
-        "pos_sampler": {
-          "provider":"sampler.Uniform3d",
-          "min": {
-            "provider": "sampler.Uniform3d",
-            "min": [-0.3, -0.3, 0.0],
-            "max": [-0.2, -0.2, 0.0]
-          },
-          "max": {
-            "provider": "sampler.Uniform3d",
-            "min": [0.2, 0.2, 0.4],
-            "max": [0.3, 0.3, 0.6]
+        # Sets the location of this entity above surface
+        "location": {
+          "provider": "sampler.UpperRegionSampler",
+          "min_height": 0.3,
+          "to_sample_on": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": "Cube.001"
+              }
+
           }
         },
-        "rot_sampler":{
-          "provider":"sampler.UniformSO3"
+        # avoid objects falling through other objects during physics simulation
+        "cf_add_modifier": {
+          "name": "Solidify",
+          "thickness": 0.0025
         }
       }
     },
     {
       "module": "object.PhysicsPositioning",
       "config": {
-        "min_simulation_time": 3,
+        "solver_iters": 30,
+        "substeps_per_frame": 40,
+        "min_simulation_time": 0.5,
         "max_simulation_time": 10,
-        "check_object_interval": 1,
-        "solver_iters": 25,
-        "substeps_per_frame": 20,
-        "friction": 100.0,
-        "linear_damping": 0.99,
-        "angular_damping": 0.99,
+        "check_object_interval": 0.25,
+        "mass_scaling": True,
+        "mass_factor": 2000,
         "objs_with_box_collision_shape": {
           "provider": "getter.Entity",
           "conditions": {
@@ -118,7 +119,7 @@
       "config": {
         "lights": [
           {
-            "number_of_samples": 1,
+            "number_of_samples": 6,
             "location": {
               "provider": "sampler.Shell",
               "center": [1, 2, 3],
@@ -128,7 +129,7 @@
               "elevation_max": 70
               },
               "type": "SUN",
-              "energy": 5
+              "energy": 10
           }
         ]
       }
@@ -141,19 +142,33 @@
           "proximity_checks": {
             "min": 0.3
           },
+          "check_if_objects_visible": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "name": "Cylinder.003"
+            }
+          },
           "excluded_objs_in_proximity_check":  {
             "provider": "getter.Entity",
             "conditions": {
               "name": "Cube.001"
             }
           },
-          "number_of_samples": 3,
+          "number_of_samples": 2,
           "location": {
             "provider": "sampler.Shell",
-            "center": [0, 0, 0],
-            "radius_min": 5.0,
+            "center": {
+              "provider": "getter.POI",
+              "selector": {
+                "provider": "getter.Entity",
+                "conditions": {
+                  "name": "Cylinder.*"
+                }
+              }
+            },
+            "radius_min": 2.0,
             "radius_max": 30.0,
-            "elevation_min": 10,
+            "elevation_min": 3,
             "elevation_max": 89,
             "uniform_elevation": True
           },
@@ -165,15 +180,8 @@
                 "provider": "getter.Entity",
                 "conditions": {
                   "name": "Cylinder.*"
-                },
-                "random_samples": 3
+                }
               }
-            },
-            "inplane_rot": {
-              "provider": "sampler.Value",
-              "type": "float",
-              "min": -0.7854,
-              "max": 0.7854
             }
           }
         }
@@ -190,7 +198,7 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "glossy_bounces": 30,
-        "samples": 150,
+        "samples": 50,
         "output_key": "colors",
         "render_normals": True
       }
