@@ -145,7 +145,7 @@
           "check_if_objects_visible": {
             "provider": "getter.Entity",
             "conditions": {
-              "name": "Cylinder.003"
+              "name": "Cylinder.005"
             }
           },
           "excluded_objs_in_proximity_check":  {
@@ -154,7 +154,7 @@
               "name": "Cube.001"
             }
           },
-          "number_of_samples": 2,
+          "number_of_samples": 10,
           "location": {
             "provider": "sampler.Shell",
             "center": {
@@ -166,10 +166,10 @@
                 }
               }
             },
-            "radius_min": 2.0,
-            "radius_max": 30.0,
-            "elevation_min": 3,
-            "elevation_max": 89,
+            "radius_min": 3.0,
+            "radius_max": 20.0,
+            "elevation_min": 5,
+            "elevation_max": 59,
             "uniform_elevation": True
           },
           "rotation": {
