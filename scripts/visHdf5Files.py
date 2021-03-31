@@ -5,6 +5,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 import sys
 import json
+from PIL import Image, ImageDraw
+from scipy import ndimage
 
 parser = argparse.ArgumentParser("Script to visualize hdf5 files")
 
@@ -54,6 +56,8 @@ def vis_data(key, data, full_hdf5_data, file_label):
         # Make sure we have three dimensions
         if len(data.shape) == 2:
             data = data[:, :, None]
+
+
         # Go through all channels
         for i in range(data.shape[2]):
             # Try to determine label
@@ -75,6 +79,11 @@ def vis_data(key, data, full_hdf5_data, file_label):
             data = data[:, :, 0]
         
         plt.imshow(data, cmap='jet')
+        if key == "depth":
+            plt.subplot(2,2,3)
+            plt.title('depth')
+            plt.imshow(data, cmap='jet')
+
     elif key in args.rgb_keys:
         plt.imshow(data)
 
@@ -94,14 +103,49 @@ def vis_file(path):
 
                 # Visualize every key
                 for key in keys:
-                    value = np.array(data[key])
-                    # Check if it is a stereo image
-                    if len(value.shape) >= 3 and value.shape[0] == 2:
-                        # Visualize both eyes separately
-                        for i, img in enumerate(value):
-                            vis_data(key, img, data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"))
-                    else:
-                        vis_data(key, value, data, os.path.basename(path))
+                    if key == "depth":
+                        value = np.array(data[key])
+                        # Check if it is a stereo image
+                        if len(value.shape) >= 3 and value.shape[0] == 2:
+                            # Visualize both eyes separately
+                            for i, img in enumerate(value):
+                                vis_data(key, img, data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"))
+                        else:
+                            vis_data(key, value, data, os.path.basename(path))
+
+                    if key == "depth":
+                        # Get x-gradient in "sx"
+                        sx = ndimage.sobel(value,axis=0,mode='constant')
+                        # Get y-gradient in "sy"
+                        sy = ndimage.sobel(value,axis=1,mode='constant')
+                        # Get square root of sum of squares
+                        sobel=np.hypot(sx,sy)
+                        print(np.unique(sobel, return_counts=True))
+                        plt.subplot(2,2,1)
+                        plt.title('sobel')
+                        plt.imshow(sobel)
+                    
+
+                        #sobel = np.where(sobel < 1, 0, sobel)
+                        #sobel[(1 <= sobel) & (sobel < 10)] = 0.00784314
+                        #sobel[(1 <= sobel) & (sobel < 5)] = 0
+                        sobel[5 <= sobel] = 0.00392157
+                        sobel[0.00392157 != sobel] = 0
+                
+
+                        #sobel_im = Image.fromarray(sobel)
+                        #sobel_im.show()
+                        #draw = ImageDraw.Draw(sobel_im)
+                        #draw.bitmap((0, 0), negs, fill=(0))
+
+                        # see edges
+                        #print(np.count_nonzero(sobel == 0.00392157))
+                        print(np.unique(sobel, return_counts=True))
+                        plt.subplot(2,2,2)
+                        plt.title('outlines')
+                        plt.imshow(sobel)
+                    
+
 
         else:
             print("The path is not a file")

@@ -53,8 +53,8 @@ height, width = len(im_arr), len(im_arr[0])
 im8bit = im.convert('L')
 img8bit = np.array(im8bit)
 
-edges = cv2.Canny( img8bit, 100, 1000 )
-
+edges = cv2.Canny( img8bit, 20, 1000 )
+Image.fromarray(edges).show()
 
 
 
@@ -96,6 +96,7 @@ for idx, annotation in enumerate(annotations):
             #item = Image.fromarray(item, mode='L')
             #item.show()
             item = Image.fromarray(item, mode='L')
+            #item.show()
             draw_ov = ImageDraw.Draw(overlay)
             draw_ov.bitmap((0, 0), item, fill=(255))
             
@@ -120,7 +121,7 @@ if save:
 #print(im)
 
 
-edges = np.where(edges==255., 0.00392157, edges)
+#edges = np.where(edges==255., 0.00392157, edges)
 edges = np.where(edges==255., 0.00392157, edges)
 
 
