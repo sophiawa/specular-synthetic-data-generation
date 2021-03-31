@@ -1,4 +1,9 @@
 # Args: <cam_file> <obj_file> <output_dir>
+# generate images: python run.py examples/coco_annotations/config.yaml m examples/coco_annotations/pan_scene.blend examples/coco_annotations/output resources/cctextures resources/haven
+# view normals: python scripts/visHdf5Files.py examples/coco_annotations/output/*.hdf5
+# view segmentation masks: python scripts/vis_coco_annotation.py
+# change resolution to 1920 x 1080 in RendererUtility
+
 {
   "version": 3,
   "setup": {
@@ -154,7 +159,7 @@
               "name": "Cube.001"
             }
           },
-          "number_of_samples": 10,
+          "number_of_samples": 20,
           "location": {
             "provider": "sampler.Shell",
             "center": {
