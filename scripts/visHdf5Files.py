@@ -156,6 +156,13 @@ def vis_file(path):
                         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3,3))
                         kernel = kernel.astype('uint8')
                         sobel = morphology.dilation(sobel)
+                        sobel = morphology.dilation(sobel)
+                        sobel = morphology.dilation(sobel)
+                        sobel = morphology.dilation(sobel)
+                        sobel = morphology.dilation(sobel)
+                        sobel = morphology.dilation(sobel)
+                        sobel = morphology.dilation(sobel)
+                        sobel = morphology.dilation(sobel)
                         wheree = np.where(sobel >= 3)
                         sobel[wheree] = 10
 
@@ -176,7 +183,7 @@ def vis_file(path):
                         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                         cnts = cv2.findContours(gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                         cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-                        cv2.drawContours(mask, cnts, -1, 5, thickness=3)
+                        cv2.drawContours(mask, cnts, -1, 5, thickness=6)
                         mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
                         #plt.imshow(mask)
 
@@ -215,15 +222,8 @@ def vis_file(path):
                         try1 = cv2.add(test, mask1)
                         where3 = np.where(mask1 != 0)
                         try1[where3] = 30
-                        print("try1")
-                        print(np.unique(try1))
-                        print("sobel")
-                        print(np.unique(sobel))
-                        print("mask1")
-                        print(np.unique(mask1))
                         try1[:,-3:] = 0
                         try1[:,:3] = 0
-                        print(np.unique(try1))
                         bru1 = np.where(try1 == 1)
                         bru2 = np.where(try1 == 2)
                         bru10 = np.where(try1 == 10)
@@ -234,8 +234,8 @@ def vis_file(path):
                         try1[bru10] = 0.00392157
                         try1[bru30] = 0.00784314
                         print(np.unique(try1, return_counts=True))
-                        #plt.imshow(try1)
-                        plt.show()
+                        plt.imshow(try1)
+                        #plt.show()
                         plt.savefig('outline2.png')
                         
                         
@@ -278,4 +278,4 @@ for i in range(1,5):
 for path in args.hdf5_paths:
     vis_file(path)
 #plt.savefig('examples/coco_annotations/output/trying_outlines.png')
-#plt.show()
+plt.show()
