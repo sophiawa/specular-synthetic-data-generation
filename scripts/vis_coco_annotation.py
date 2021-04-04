@@ -54,7 +54,7 @@ im8bit = im.convert('L')
 img8bit = np.array(im8bit)
 
 edges = cv2.Canny( img8bit, 20, 1000 )
-Image.fromarray(edges).show()
+#Image.fromarray(edges).show()
 
 
 
@@ -117,16 +117,17 @@ for idx, annotation in enumerate(annotations):
 if save:
     im.save(os.path.join(base_path, 'coco_annotated_{}.png'.format(image_idx)), "PNG")
     
-#im.show()
+im.show()
+im.save('mask.png')
 #print(im)
 
 
 #edges = np.where(edges==255., 0.00392157, edges)
-edges = np.where(edges==255., 0.00392157, edges)
+#edges = np.where(edges==255., 0.00392157, edges)
 
 
-plt.imshow(edges)
-print(np.unique(edges, return_counts=True))
-plt.show()
+#plt.imshow(edges)
+#print(np.unique(edges, return_counts=True))
+#plt.show()
 
 #Image.fromarray(edges).show()
