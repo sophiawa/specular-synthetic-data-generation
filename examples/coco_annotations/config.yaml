@@ -206,7 +206,8 @@
         "samples": 50,
         "output_key": "colors",
         "render_normals": True,
-        "render_distance": True
+        "render_distance": True,
+        "image_type": "JPEG"
       }
     },
     {
