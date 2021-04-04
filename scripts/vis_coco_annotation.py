@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--conf', dest='conf', default='coco_annotations.json', help='coco annotation json file')
+parser.add_argument('-gi', '--gen_index', help='generating image index')
 parser.add_argument('-i', '--image_index', dest='image_index', default=0, help='image over which to annotate, uses the rgb rendering', type=int)
 parser.add_argument('-b', '--base_path', dest='base_path', default='examples/coco_annotations/output/coco_data', help='path to folder with coco_annotation.json and images', type=str)
 parser.add_argument('--save', '-s', action='store_true', help='saves visualization of coco annotations under base_path/coco_annotated_x.png ')
@@ -118,7 +119,7 @@ if save:
     im.save(os.path.join(base_path, 'coco_annotated_{}.png'.format(image_idx)), "PNG")
     
 im.show()
-im.save('mask.png')
+im.save('mask' + str(args.gen_index) + '.png')
 #print(im)
 
 
